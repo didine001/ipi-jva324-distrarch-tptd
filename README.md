@@ -27,6 +27,7 @@ Le but des exercices (TD en séance et TP évalués) est de faire évoluer cette
             - erreur ne trouve pas le symbol "java" : clic droit sur pom.xml > Build > sur Setup DSK choisir Configure > choisir Download et install (par exemple de la JDK Eclipse Temurin)
             - "Error running..." : Project JDK is not specified > Configure... > no SDK > Add SDK > Download
             - erreur "Cannot find JRE" : File > Project Structure (ou clic droit dans l'arborescence sur la racine d'un projet Maven), et de là dans Platform Settings > SDKs faire + > Download JDK (ou bien dans Project Settings > Project faire Add SDK > Download SDK)
+            - Pour mettre à jour Java : File > Project Structure puis SDKs puis Download...
         - lancer un build maven complet : Run > Edit configurations > Maven > Create configuration > mettre Working directory au dossier du projet et dans Command line, écrire : clean install
         - problème de sécurisation de connexion car proxy :
           - unable to access 'https://github.com/mdutoo/ipi-jva350-tptd.git/': SSL certificate problem: unable to get local issuer certificate
@@ -54,6 +55,7 @@ Le but des exercices (TD en séance et TP évalués) est de faire évoluer cette
           NB. par contre, configurer cafile dans ./npmrc ne marche pas car https obligé depuis October 4, 2021 comme le disent les logs
 
     - sinon Eclipse : voir https://thierry-leriche-dessirier.developpez.com/tutoriels/java/importer-projet-maven-dans-eclipse-5-min/
+      - mettre à jour java : télécharger la dernière distribution OpenJDK par exemple d'Eclipse (Temurin) à https://www.adoptium.net , puis le sélectionner comme défaut dans Windows > Preferences, puis si nécesssaire le mettre à jour
 - Avoir installé postgresql (ou mysql) : https://www.postgresql.org/download/
 
 ## Créer la base de données
@@ -93,7 +95,7 @@ Configurer l'application pour s'en servir : dans ```main/resources/application.p
 
 ### Directement en Java :
 
-D'abord (et après tout changement d'interface utilisateur React.js) lancer une compilation complète : ```mvn clean install-DskipTests```
+D'abord (et après tout changement d'interface utilisateur React.js) lancer une compilation complète : ```mvn install-DskipTests```
 
 lancer la classe com.ipi.jva324.Jva324Application
 - dans l'IDE
@@ -140,13 +142,15 @@ Voici l'organisation du code source de l'application :
 
 Forker ce repository Github dans votre propre compte Github. Après chaque question, vérifiez que les tests marchent toujours bien sûr ainsi que l'IHM, et committez et pushez vos changements.
 
-[TD] Exécutez les tests unitaires. D'après eux, quelle vous semble être la partie du code le plus important de l'application et que fait-il ?
+[TD] Exécutez l'application. Allez sur l'IHM web et essayez de l'utiliser.
+- S'il ne s'affiche qu'un produit "dummy", alors lancez les outils développeurs du navigateur. Dans l'onglet Réseau, dans les appels fait spar l'IHM à l'API, quelle est l'URI à laquelle l'appel échoue ? Il faut alors lire le cours à propos de Spring Data REST (slide "Communication - auto APIfication : Spring Data REST" et suivant) (si ce n'est déjà fait), et suivre les instructions des slides "Communication - Spring Data REST - Configuration"
+- Est-il encore impossible de créer de nouvelles commandes à partir d'un produit ? alors lancez les outils développeurs du navigateur. Qu'observez-vous dans leur onglet Réseau ? et dans la trace de logs du démarrage de votre application ? C'est sans doute qu'il faut encore suivre les instructions du slide "Communication - Spring Data REST - Configuration (2)".
+
+[TD] Trouvez les tests unitaires et exécutez-les (soit dans l'IDE individuellement par clic droit dessus > Run as, soit par commande maven ex. ```mvn install``` dans l'IDE ou le terminal). D'après eux, quelle vous semble être la partie du code le plus important de l'application et que fait-il ?
 
 [TD] Exécutez l'application. Allez sur l'IHM web et essayez de l'utiliser. Reproduisez les 2 cas trouvés dans le code des tests unitaires. Notez les fonctionnalités qui semblent incomplètes (I, V, E) ou manquer (S) et leurs potentielles difficultés (U).
 
 ### Extraction du microservice "stock" - refactoring de l'appel en REST HAL
-
-TODO NON [TD] (à ne faire que s'il n'existe pas encore) Copiez le module Maven d'origine vers 1 module "commande". Adaptez sa configuration de build (pom.xml) en conséquence, et branchez-la dans le pom. xml racine. Vérifiez que tests et IHM fonctionnent toujours pareil. Committez et pushez, et faites-le dans toutes les questions suivantes.
 
 [TD] Quelle est la partie la plus importante de commandeService.createCommande() ? En écrire un test unitaire.
 
@@ -164,7 +168,7 @@ TODO NON [TD] (à ne faire que s'il n'existe pas encore) Copiez le module Maven 
 
 [TD] BONUS Ecrivez une version mockée du test existant de commandeService.createCommande().
 
-[TD] Sortez la partie http://hôte:port de l'URL en propriétés de configuration, TODO utilisez-la à la place dans CommandeProduitRESTHALImpl.
+[TD] Sortez la partie http://hôte:port de l'URL en propriété de configuration dans application.properties (injectée dans une variable de classe en l'annotant par @Value("ma.prop:valeurPardéfaut")), utilisez-la à la place dans CommandeProduitRESTHALImpl.
 
 [TP] faire pareil que dans CommandeService.createCommande() mais dans CommandeService.validateCommande(), afin de finir de ne plus utiliser ProduitService directement dans CommandeService.
 
@@ -184,9 +188,7 @@ NB. En temps normal, chaque microservice serait dans son propre repository Githu
 - Ensuite, sur le modèle de CommandeProduitServiceRestHalImpl, développer CommandeProduitServiceRestImpl qui appelle cette nouvelle StockApi et non plus l'API automatiquement exposée au format REST HAL par Spring Data Rest.
 - Faites-en un test d'intégration CommandeProduitServiceRestImplIntegrationTest sur le modèle de celui fait en TD dans CommandeProduitServiceRestHalImplIntegrationTest. Utilisez la même solution (@Import(TestRestConfiguration)) pour le faire marcher en parallèle des autres.
 
-[TD] BONUS si vous êtes en avance, adaptez l'IHM de stock pour qu'elle s'en serve, voire commencez à développer une version Thymeleaf de l'IHM (par exemple une simple liste de produits).
-
-TODO cours test API REST locale / fournie
+[TP] BONUS adaptez l'IHM de stock pour qu'elle s'en serve, voire développez le début d'une version Thymeleaf de l'IHM (par exemple une simple liste de produits).
 
 [TD] Développez dans le module commande un composant Spring (annoté @Component) CommandeProduitServiceRESTImpl implémentant l'interface CommandeProduitService à l'aide de RESTTemplate appelant cette nouvelle API /api/produits de stock. Ecrivez un test d'intégration de CommandeService.createCommande() qui s'en sert TODO @...
 
