@@ -162,6 +162,8 @@ Forker ce repository Github dans votre propre compte Github. Après chaque quest
 
 [TD] Quel problème apparaît en essayant de le faire marcher (démarrage test ou IHM), pourquoi ? Pour le résoudre, pour l'instant commentez l'annotation en tête de CommandeProduitLocalImpl. Vérifiez que tests et IHM marchent toujours.
 
+Ce problème survient parce que Spring trouve deux implémentations de l'interface CommandeProduitService (toutes deux annotées avec @Component), et ne sait pas laquelle injecter dans CommandeService.Spring utilise l'injection de dépendances automatique via @Autowired. Quand une interface a plusieurs implémentations, Spring ne peut pas déterminer automatiquement laquelle utiliser sans indication supplémentaire.
+
 [TD] Ecrivez dans une classe CommandeProduitServiceRestHalImplIntegrationTest un test d'intégration de CommandeProduitServiceRESTHALImpl, le plus simple possible (test de son appel distant).
 
 [TD] Déplacez CommandeProduitServiceLocalImpl dans le dossier de sources "test" (plutôt que "main"). Faites en sorte que son test marche toujours. Pour cela, définissez son instanciation (aide: comme celle de RestTemplate, voir le cours...) dans une classe TestLocalConfiguration annotée @Configuration utilisée dans le test en annotant ce dernier @Import(TestLocalConfiguration). TODO cours

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -10,10 +10,10 @@
 	</parent>
 
 	<groupId>com.ipi.jva324</groupId>
-	<artifactId>commande</artifactId>
+	<artifactId>stock</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>commande</name>
+	<name>stock</name>
 	<description>TP IPI Architectures distribuées</description>
 
 	<properties>
@@ -34,10 +34,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
-		</dependency -->
+		</dependency>
 
 		<!-- eureka Discovery Service client
 		for all nodes (except Discovery Service)

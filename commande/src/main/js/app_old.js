@@ -36,10 +36,10 @@ class CommandeList extends React.Component{
 				<tbody>
 					<tr>
 						<th>ID</th>
-						<th>produitId</th>
-						<th>quantite</th>
-						<th>quantiteDisponibleStockConnu</th>
-						<th>status</th>
+						<th>Id produit</th>
+						<th> Nom </th>
+						<th>Quantité</th>
+						<th>Statut</th>
 					</tr>
 					{commandes}
 				</tbody>
@@ -54,8 +54,8 @@ class Commande extends React.Component{
 			<tr>
 				<td>{this.props.commande.id}</td>
 				<td>{this.props.commande.produitId}</td>
+				<td> {this.props.commande.nom}</td>
 				<td>{this.props.commande.quantite}</td>
-				<td>{this.props.commande.quantiteDisponibleStockConnu}</td>
 				<td>{this.props.commande.status}</td>
 			</tr>
 		)

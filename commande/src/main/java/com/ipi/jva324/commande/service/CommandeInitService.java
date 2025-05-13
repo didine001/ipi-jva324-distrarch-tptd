@@ -23,8 +23,6 @@ public class CommandeInitService implements CommandLineRunner {
             return;
         }
 
-        // data init :
-        // en utilisant le repository, car le service utilise la couche REST qui n'est pas encore démarrée
         Commande c1 = new Commande(1l, 0, "test");
         c1.setStatus("created");
         commandeRepository.save(c1);

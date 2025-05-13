@@ -4,6 +4,7 @@ import com.ipi.jva324.commande.model.Commande;
 import com.ipi.jva324.commande.service.CommandeInvalideException;
 import com.ipi.jva324.commande.service.CommandeService;
 import com.ipi.jva324.commande.service.StockInsuffisantCommandeException;
+import org.h2.command.Command;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

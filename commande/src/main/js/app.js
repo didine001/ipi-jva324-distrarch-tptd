@@ -6,12 +6,12 @@ import restClient from "./restClient";
 
 const App = () => {
 
-	const [commandes, setCommandes] = useState([]);
-	const [produits, setProduits] = useState([{ id:1, nom:"dummy (réponse du serveur pas reçue)" }]);
+    const [commandes, setCommandes] = useState([]);
+    const [produits, setProduits] = useState([{ id:1, nom:"dummy (réponse du serveur pas reçue)" }]);
 
     // Similar to componentDidMount and componentDidUpdate
     useEffect(() => {
-		updateAll()
+        updateAll()
     }, []); // sinon appelé en boucle car redéclenché par setCommandes()
 
     const updateAll = () => {
@@ -20,12 +20,12 @@ const App = () => {
 			setCommandes(response.entity._embedded.commandes);
 		});
 		*/
-		restClient({method: 'GET', path: '/api/commandes'}).done(response => {
-			setCommandes(response.entity);
-		});
-		halRestClient({method: 'GET', path: '/api/data-rest/produitEnStocks'}).done(response => {
-			setProduits(response.entity._embedded.produitEnStocks);
-		});
+        restClient({method: 'GET', path: '/api/commandes'}).done(response => {
+            setCommandes(response.entity);
+        });
+        restClient({method: 'GET', path: '/api/stock'}).done(response => {
+            setProduits(response.entity._embedded.produitEnStocks);
+        });
     }
 
     const produitCpts = produits.map(produit =>
@@ -33,16 +33,16 @@ const App = () => {
     )
 
     return (
-      <>
-        <CommandeList commandes={commandes} refreshCommande={updateAll}/>
+        <>
+            <CommandeList commandes={commandes} refreshCommande={updateAll}/>
 
-        <p/>
-        <p/>
+            <p/>
+            <p/>
 
-        Produits :
-        <p/>
-        { produitCpts }
-      </>
+            Produits :
+            <p/>
+            { produitCpts }
+        </>
     )
 }
 
@@ -56,17 +56,16 @@ const CommandeList = ({ commandes, refreshCommande }) => {
     return (
         <table>
             <tbody>
-                <tr>
-                    <th>ID</th>
-                    <th>produitId</th>
-                    <th>quantite</th>
-                    <th>quantiteDisponibleStockConnu</th>
-                    <th>status</th>
-                    <th></th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th>ID</th>
+                <th>produitId</th>
+                <th>quantite</th>
+                <th>status</th>
+                <th></th>
+                <th></th>
+            </tr>
 
-                { commandeCpts }
+            { commandeCpts }
 
             </tbody>
         </table>
@@ -102,8 +101,7 @@ const Commande = ({ commande, refreshCommande }) => {
             <td>{commande.id}</td>
             <td>{commande.produitId}</td>
             <td><input type="number" value={state.quantite}
-                onChange={(e) => setState({...state, "quantite" : e.target.value})}/></td>
-            <td>{commande.quantiteDisponibleStockConnu}</td>
+                       onChange={(e) => setState({...state, "quantite" : e.target.value})}/></td>
             <td>{commande.status}</td>
 
             {/*
@@ -158,18 +156,17 @@ const NouvelleCommandeDeProduit = ({ produit, refreshCommande }) => {
 const ReadOnlyCommande = ({ commande }) => {
     return (
         <tr>
-          <form>
-            <td>{commande.id}</td>
-            <td>{commande.produitId}</td>
-            <td>{commande.quantite}</td>
-            <td>{commande.quantiteDisponibleStockConnu}</td>
-            <td>{commande.status}</td>
-          </form>
+            <form>
+                <td>{commande.id}</td>
+                <td>{commande.produitId}</td>
+                <td>{commande.quantite}</td>
+                <td>{commande.status}</td>
+            </form>
         </tr>
     )
 }
 
 ReactDOM.render(
-	<App />,
-	document.getElementById('root')
+    <App />,
+    document.getElementById('root')
 )
